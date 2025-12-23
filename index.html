@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="kk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberTech Elite | Kuatbay Erasyl</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+         :root {
+            --neon: #00f2ff;
+            --purple: #bc13fe;
+            --dark: #05050a;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark);
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #05050a 100%);
+        }
+        
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--neon);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 26px;
+            color: var(--neon);
+            text-shadow: 0 0 15px var(--neon);
+            text-decoration: none;
+        }
+        /* --- SWIPER CAROUSEL --- */
+        
+        .swiper {
+            width: 100%;
+            padding: 50px 0;
+        }
+        
+        .swiper-slide {
+            width: 300px;
+            transition: 0.4s;
+        }
+        /* --- PRODUCT CARD --- */
+        
+        .product-card {
+            background: var(--glass);
+            border: 1px solid rgba(0, 242, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            border-color: var(--neon);
+            box-shadow: 0 10px 40px rgba(0, 242, 255, 0.3);
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 180px;
+            object-fit: contain;
+            transition: 0.4s;
+        }
+        
+        .product-card:hover .product-img {
+            filter: drop-shadow(0 0 15px var(--neon));
+        }
+        /* --- BUTTONS --- */
+        
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .btn-neon {
+            background: var(--neon);
+            color: #000;
+        }
+        
+        .btn-neon:hover {
+            box-shadow: 0 0 20px var(--neon);
+            transform: scale(1.05);
+        }
+        /* --- FOOTER --- */
+        
+        footer {
+            text-align: center;
+            padding: 50px 0;
+            border-top: 1px solid var(--purple);
+            margin-top: 50px;
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        .student-name {
+            color: var(--neon);
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #111;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="#" class="logo">CYBER<span style="color:var(--purple)">TECH</span></a>
+        <div style="display:flex; gap:20px; align-items:center;">
+            <button id="authBtn" class="btn btn-neon" onclick="openModal('loginModal')">КІРУ</button>
+            <div id="userPanel" class="hidden">
+                <span id="uName" style="color:var(--neon); margin-right:15px; font-weight: bold;"></span>
+                <i class="fas fa-power-off" onclick="logout()" style="color:red; cursor:pointer;"></i>
+            </div>
+            <div onclick="openModal('cartModal')" style="cursor:pointer; position:relative;">
+                <i class="fas fa-shopping-cart" style="font-size:1.5rem;"></i>
+                <span id="cartCount" style="position:absolute; top:-10px; right:-10px; background:var(--purple); border-radius:50%; width:20px; height:20px; text-align:center; font-size:12px;">0</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" style="margin-top: 30px;">
+        <h2 style="text-align:center; font-family:'Orbitron'; color:var(--neon);" data-aos="fade-down">TOP ТАУАРЛАР</h2>
+        <div class="swiper mySwiper" data-aos="zoom-in">
+            <div class="swiper-wrapper" id="sliderGrid"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+
+    <div class="container" style="padding: 0 8%;">
+        <div id="adminPanel" class="hidden" style="background:rgba(188, 19, 254, 0.1); padding:20px; border-radius:15px; margin-bottom:30px;">
+            <h3 style="color:var(--purple); font-family:'Orbitron';">ЖАҢА ТАУАР ҚОСУ</h3>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <input type="text" id="pName" placeholder="Атауы" style="flex:1;">
+                <input type="number" id="pPrice" placeholder="Бағасы" style="flex:1;">
+                <button class="btn btn-neon" onclick="addProduct()">ҚОСУ</button>
+            </div>
+        </div>
+
+        <h2 style="font-family:'Orbitron'; border-left: 5px solid var(--purple); padding-left: 15px;">БАРЛЫҚ ТАУАРЛАР</h2>
+        <div class="products-grid" id="mainGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:30px; margin-top:30px;"></div>
+    </div>
+
+    <footer>
+        <p style="font-size: 1.2rem; margin-bottom: 10px;">
+            Орындаған студент: <span class="student-name">КУВАТБАЙ ЕРАСЫЛ</span>
+        </p>
+        <p style="color: #555; font-family: 'Orbitron'; font-size: 0.8rem;">&copy; 2024 CYBERTECH ELITE SYSTEM</p>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div style="background:#111; padding:40px; border-radius:20px; border:1px solid var(--neon); width:350px;">
+            <h2 style="text-align:center; color:var(--neon);">КІРУ</h2>
+            <input type="text" id="lUser" placeholder="Логин (erasyl / admin)">
+            <input type="password" id="lPass" placeholder="Құпия сөз (2024 / admin123)">
+            <button class="btn btn-neon" style="width:100%;" onclick="login()">КІРУ</button>
+            <p onclick="closeModal('loginModal')" style="cursor:pointer; color:#666; margin-top:15px; text-align:center;">Жабу</p>
+        </div>
+    </div>
+
+    <div id="cartModal" class="modal">
+        <div style="background:#111; padding:40px; border-radius:20px; border:1px solid var(--purple); width:450px;">
+            <h2>СЕБЕТ</h2>
+            <div id="cartItems" style="max-height:300px; overflow-y:auto;"></div>
+            <hr style="border:0.5px solid #222;">
+            <div style="display:flex; justify-content:space-between; font-size:1.5rem;">
+                <span>Жиыны:</span>
+                <span id="totalPrice" style="color:var(--neon);">0 ₸</span>
+            </div>
+            <button class="btn btn-neon" style="width:100%; margin-top:20px;" onclick="checkout()">САТЫП АЛУ</button>
+            <p onclick="closeModal('cartModal')" style="cursor:pointer; color:#666; text-align:center; margin-top:15px;">Артқа</p>
+        </div>
+    </div>
+
+    <div id="toast" style="position:fixed; bottom:20px; right:20px; background:var(--neon); color:black; padding:15px; border-radius:10px; display:none; z-index:3000; font-weight:bold;"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        AOS.init();
+
+        const initialData = [{
+            id: 1,
+            name: "MacBook Pro M3",
+            price: 1450000,
+            img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500"
+        }, {
+            id: 2,
+            name: "RTX 4090 Strix",
+            price: 980000,
+            img: "https://images.unsplash.com/photo-1591488320449-011701bb6704?w=500"
+        }, {
+            id: 3,
+            name: "Razer DeathAdder",
+            price: 45000,
+            img: "https://images.unsplash.com/photo-1527814050087-3793815479db?w=500"
+        }, {
+            id: 4,
+            name: "Keychron Q1 Pro",
+            price: 85000,
+            img: "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=500"
+        }, {
+            id: 5,
+            name: "Samsung OLED G9",
+            price: 560000,
+            img: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500"
+        }, {
+            id: 6,
+            name: "Sony PS5 Slim",
+            price: 275000,
+            img: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=500"
+        }, {
+            id: 7,
+            name: "Xbox Series X",
+            price: 260000,
+            img: "https://images.unsplash.com/photo-1605901309584-818e25960a8f?w=500"
+        }, {
+            id: 8,
+            name: "Intel i9-14900K",
+            price: 310000,
+            img: "https://images.unsplash.com/photo-1591405351990-4726e331f141?w=500"
+        }];
+
+        let products = JSON.parse(localStorage.getItem('final_prod')) || initialData;
+        let cart = JSON.parse(localStorage.getItem('final_cart')) || [];
+        let user = localStorage.getItem('final_user') || null;
+
+        function render() {
+            const slider = document.getElementById('sliderGrid');
+            const main = document.getElementById('mainGrid');
+
+            if (user === 'admin') document.getElementById('adminPanel').classList.remove('hidden');
+
+            slider.innerHTML = products.slice(0, 5).map(p => `
+                <div class="swiper-slide">
+                    <div class="product-card">
+                        <img src="${p.img}" class="product-img">
+                        <h4 style="margin:10px 0;">${p.name}</h4>
+                        <button class="btn btn-neon" onclick="addToCart(${p.id})">ҚОСУ</button>
+                    </div>
+                </div>
+            `).join('');
+
+            main.innerHTML = products.map((p, i) => `
+                <div class="product-card" data-aos="fade-up" data-aos-delay="${i*50}">
+                    <img src="${p.img || 'https://via.placeholder.com/200'}" class="product-img">
+                    <h3>${p.name}</h3>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="color:var(--neon); font-weight:bold;">${p.price.toLocaleString()} ₸</span>
+                        <div style="display:flex; gap:5px;">
+                            ${user === 'admin' ? `<button onclick="delProd(${p.id})" style="background:red; border:none; color:white; padding:5px; border-radius:5px;"><i class="fas fa-trash"></i></button>` : ''}
+                            <button class="btn btn-neon" onclick="addToCart(${p.id})" style="padding:5px 12px;"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            updateUI();
+        }
+
+        const swiper = new Swiper(".mySwiper", {
+            effect: "coverflow", grabCursor: true, centeredSlides: true,
+            slidesPerView: "auto", autoplay: { delay: 2000 },
+            coverflowEffect: { rotate: 30, stretch: 0, depth: 100, modifier: 1, slideShadows: true }
+        });
+
+        function login() {
+            const u = document.getElementById('lUser').value;
+            const p = document.getElementById('lPass').value;
+            if(u === 'admin' && p === 'admin123') user = 'admin';
+            else if(u === 'erasyl' && p === '2024') user = 'КУВАТБАЙ ЕРАСЫЛ';
+            else if(u === 'user' && p === '12345') user = 'user';
+            else return toast("Қате!");
+            
+            localStorage.setItem('final_user', user);
+            location.reload();
+        }
+
+        function logout() { localStorage.clear(); location.reload(); }
+
+        function addToCart(id) {
+            if(!user) return openModal('loginModal');
+            cart.push(products.find(x => x.id === id));
+            localStorage.setItem('final_cart', JSON.stringify(cart));
+            updateUI();
+            toast("Себетке қосылды!");
+        }
+
+        function updateUI() {
+            document.getElementById('cartCount').innerText = cart.length;
+            if(user) {
+                document.getElementById('authBtn').classList.add('hidden');
+                document.getElementById('userPanel').classList.remove('hidden');
+                document.getElementById('uName').innerText = user;
+            }
+            let total = 0;
+            document.getElementById('cartItems').innerHTML = cart.map((item, idx) => {
+                total += item.price;
+                return `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222;">
+                    <span>${item.name}</span>
+                    <span>${item.price.toLocaleString()} ₸ <i class="fas fa-trash" onclick="remCart(${idx})" style="color:red; cursor:pointer; margin-left:10px;"></i></span>
+                </div>`;
+            }).join('');
+            document.getElementById('totalPrice').innerText = total.toLocaleString() + " ₸";
+        }
+
+        function addProduct() {
+            const n = document.getElementById('pName').value;
+            const p = document.getElementById('pPrice').value;
+            if(!n || !p) return;
+            products.unshift({id: Date.now(), name: n, price: parseInt(p), img: ""});
+            localStorage.setItem('final_prod', JSON.stringify(products));
+            render();
+        }
+
+        function delProd(id) {
+            products = products.filter(x => x.id !== id);
+            localStorage.setItem('final_prod', JSON.stringify(products));
+            render();
+        }
+
+        function remCart(i) {
+            cart.splice(i, 1);
+            localStorage.setItem('final_cart', JSON.stringify(cart));
+            updateUI();
+        }
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function toast(m) {
+            const t = document.getElementById('toast');
+            t.innerText = m; t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
+        }
+        function checkout() {
+            if(cart.length === 0) return toast("Себет бос!");
+            toast("Тапсырыс сәтті аяқталды!");
+            cart = []; localStorage.removeItem('final_cart'); updateUI(); closeModal('cartModal');
+        }
+
+        window.onload = render;
+    </script>
+</body>
+
+</html>
